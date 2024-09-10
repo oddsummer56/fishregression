@@ -1,6 +1,6 @@
 [project]
 name = "fishregression"
-version = "0.1.0"
+version = "0.3.1"
 description = "Default template for PDM package"
 authors = [
     {name = "oddsummer56", email = "oddsummer56@gmail.com"},
@@ -17,7 +17,7 @@ license = {text = "MIT"}
 
 
 [tool.pdm]
-distribution = false
+distribution = true
 
 [tool.pdm.dev-dependencies]
 note = [
