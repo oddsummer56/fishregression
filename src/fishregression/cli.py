@@ -1,18 +1,44 @@
-from fishregression.model.manager import get_model_path
-import pickle
-import typer
+import requests
+import json
 
-def run_prediction(length: float):
+def lr_api(length):
+
+    headers = {
+        'accept': 'application/json',
+    }
+
+    params = {
+        'length': length,
+    }
+
+    response = requests.get('http://127.0.0.1:8000/fish_weight', params=params, headers=headers)
+
+    data = json.loads(response.text)
+    r = data['prediction']
     
-    model_path = get_model_path()
-    
-    with open(model_path, "rb") as f:
-        model = pickle.load(f)
-    
-    r = model.predict([[length**2, length]])
-    
-    print(f"length:{length} 물고기는 weight: {r[0]}으로 예측됩니다!")
-    return float(r[0])
+    return r
+
+def kn_api(length, weight):
+
+    headers = {
+        'accept': 'application/json',
+    }
+
+    params = {
+        'length': length,
+        'weight': weight,
+    }
+
+    response = requests.get('http://localhost:1234/fish', params=params, headers=headers)
+
+    data = json.loads(response.text)
+    r = data['prediction']
+
+    return r
 
 def predict():
-    typer.run(run_prediction)
+    length = float(input("물고기 길이(cm) 입력하세요><: "))
+    weight = lr_api(length)
+    fish = kn_api(length, weight)
+
+    print(f"{length} 물고기의 무게는 {weight} 이고 생선종류는 {fish} 입니다!")
